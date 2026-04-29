@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – MyApp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f0e8; --panel: #fff; --accent: #2d5a3d; --accent2: #4a8c62;
+      --text: #1a1a1a; --muted: #7a7a7a; --border: #e0d8cc;
+    }
+    body {
+      font-family: 'Jost', sans-serif; background: var(--bg);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(45,90,61,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(74,140,98,0.08) 0%, transparent 50%);
+    }
+    .wrapper {
+      display: flex; width: 860px; min-height: 520px; border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(45,90,61,0.12), 0 0 0 1px var(--border);
+      animation: rise 0.7s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(30px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .side {
+      width: 340px; flex-shrink: 0; background: var(--accent);
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 44px 40px; position: relative; overflow: hidden;
+    }
+    .side::before {
+      content: ''; position: absolute; top: -80px; right: -80px;
+      width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.06);
+    }
+    .side::after {
+      content: ''; position: absolute; bottom: -60px; left: -60px;
+      width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.05);
+    }
+    .brand { font-family: 'Playfair Display', serif; font-size: 26px; color: #fff; position: relative; z-index: 1; }
+    .brand span { display: block; font-family: 'Jost', sans-serif; font-size: 11px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 6px; }
+    .side-quote { color: rgba(255,255,255,0.75); font-size: 14px; font-weight: 300; line-height: 1.7; border-left: 2px solid rgba(255,255,255,0.25); padding-left: 16px; position: relative; z-index: 1; }
+    .form-panel { flex: 1; background: var(--panel); padding: 52px 48px; display: flex; flex-direction: column; justify-content: center; }
+    .form-panel h1 { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--text); margin-bottom: 6px; }
+    .sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
+    .field { margin-bottom: 20px; }
+    label { display: block; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    input[type="email"], input[type="password"] {
+      width: 100%; padding: 13px 16px; background: var(--bg);
+      border: 1.5px solid var(--border); border-radius: 10px;
+      font-family: 'Jost', sans-serif; font-size: 15px; color: var(--text);
+      outline: none; transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(45,90,61,0.10); background: #fff; }
+    input::placeholder { color: #bbb; }
+    .btn {
+      width: 100%; padding: 14px; margin-top: 8px; background: var(--accent);
+      color: #fff; font-family: 'Jost', sans-serif; font-size: 15px; font-weight: 500;
+      letter-spacing: 1px; border: none; border-radius: 10px; cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 4px 20px rgba(45,90,61,0.25);
+    }
+    .btn:hover { background: var(--accent2); }
+    .btn:active { transform: scale(0.99); }
+    .alert-error {
+      background: #fdecea; border: 1px solid #f5c6c2; color: #b33a30;
+      border-radius: 8px; padding: 11px 14px; font-size: 14px; margin-bottom: 20px;
+    }
+    .footer-link { margin-top: 28px; text-align: center; font-size: 14px; color: var(--muted); }
+    .footer-link a { color: var(--accent); font-weight: 500; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+    .footer-link a:hover { border-color: var(--accent); }
+    @media (max-width: 700px) {
+      .wrapper { flex-direction: column; width: 95%; min-height: unset; }
+      .side { width: 100%; padding: 28px; } .side-quote { display: none; }
+      .form-panel { padding: 36px 28px; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="side">
+    <div class="brand"><span>Welcome to</span>MyApp</div>
+    <p class="side-quote">Sign in to access your personal dashboard and pick up right where you left off.</p>
+  </div>
+  <div class="form-panel">
+    <h1>Sign in</h1>
+    <p class="sub">Enter your credentials to continue.</p>
+
+    {% if error %}
+      <div class="alert-error">&#9888;&nbsp; {{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/login">
+      <div class="field">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="john@example.com" required/>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required/>
+      </div>
+      <button type="submit" class="btn">Login</button>
+    </form>
+
+    <p class="footer-link">Don't have an account?&nbsp;<a href="/register">Create new account</a></p>
+  </div>
+</div>
+</body>
+</html>

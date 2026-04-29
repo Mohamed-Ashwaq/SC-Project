@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Account – MyApp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f0e8; --panel: #fff; --accent: #2d5a3d; --accent2: #4a8c62;
+      --text: #1a1a1a; --muted: #7a7a7a; --border: #e0d8cc;
+    }
+    body {
+      font-family: 'Jost', sans-serif; background: var(--bg); min-height: 100vh;
+      display: flex; align-items: center; justify-content: center; padding: 24px 16px;
+      background-image:
+        radial-gradient(circle at 80% 10%, rgba(45,90,61,0.07) 0%, transparent 50%),
+        radial-gradient(circle at 20% 90%, rgba(74,140,98,0.07) 0%, transparent 50%);
+    }
+    .wrapper {
+      display: flex; width: 860px; min-height: 560px; border-radius: 24px; overflow: hidden;
+      box-shadow: 0 24px 80px rgba(45,90,61,0.12), 0 0 0 1px var(--border);
+      animation: rise 0.7s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(30px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .side {
+      width: 300px; flex-shrink: 0; background: var(--accent);
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 44px 36px; position: relative; overflow: hidden;
+    }
+    .side::before { content: ''; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; border-radius: 50%; background: rgba(255,255,255,0.06); }
+    .side::after  { content: ''; position: absolute; bottom: -80px; left: -80px; width: 240px; height: 240px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+    .brand { font-family: 'Playfair Display', serif; font-size: 26px; color: #fff; position: relative; z-index: 1; }
+    .brand span { display: block; font-family: 'Jost', sans-serif; font-size: 11px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 6px; }
+    .side-steps { list-style: none; position: relative; z-index: 1; }
+    .side-steps li { display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.70); margin-bottom: 14px; }
+    .side-steps li .dot { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff; flex-shrink: 0; }
+    .form-panel { flex: 1; background: var(--panel); padding: 48px 48px 44px; display: flex; flex-direction: column; justify-content: center; }
+    .form-panel h1 { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--text); margin-bottom: 6px; }
+    .sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { margin-bottom: 18px; }
+    label { display: block; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    input[type="text"], input[type="email"], input[type="password"] {
+      width: 100%; padding: 12px 16px; background: var(--bg);
+      border: 1.5px solid var(--border); border-radius: 10px;
+      font-family: 'Jost', sans-serif; font-size: 15px; color: var(--text);
+      outline: none; transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(45,90,61,0.10); background: #fff; }
+    input::placeholder { color: #bbb; }
+    .btn {
+      width: 100%; padding: 14px; margin-top: 6px; background: var(--accent);
+      color: #fff; font-family: 'Jost', sans-serif; font-size: 15px; font-weight: 500;
+      letter-spacing: 1px; border: none; border-radius: 10px; cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 4px 20px rgba(45,90,61,0.25);
+    }
+    .btn:hover { background: var(--accent2); }
+    .btn:active { transform: scale(0.99); }
+    .alert-error   { background: #fdecea; border: 1px solid #f5c6c2; color: #b33a30; border-radius: 8px; padding: 11px 14px; font-size: 14px; margin-bottom: 18px; }
+    .alert-success { background: #eaf6ee; border: 1px solid #b2dfca; color: #2d5a3d; border-radius: 8px; padding: 11px 14px; font-size: 14px; margin-bottom: 18px; }
+    .footer-link { margin-top: 20px; text-align: center; font-size: 14px; color: var(--muted); }
+    .footer-link a { color: var(--accent); font-weight: 500; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+    .footer-link a:hover { border-color: var(--accent); }
+    @media (max-width: 700px) {
+      .wrapper { flex-direction: column; width: 100%; min-height: unset; }
+      .side { width: 100%; padding: 28px; } .side-steps { display: none; }
+      .form-panel { padding: 36px 24px; }
+      .row { grid-template-columns: 1fr; gap: 0; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="side">
+    <div class="brand"><span>Join</span>MyApp</div>
+    <ul class="side-steps">
+      <li><span class="dot">1</span> Fill in your details</li>
+      <li><span class="dot">2</span> Create your account</li>
+      <li><span class="dot">3</span> Sign in and explore</li>
+    </ul>
+  </div>
+  <div class="form-panel">
+    <h1>Create account</h1>
+    <p class="sub">Fill in your information below to get started.</p>
+
+    {% if error %}
+      <div class="alert-error">&#9888;&nbsp; {{ error }}</div>
+    {% endif %}
+    {% if success %}
+      <div class="alert-success">&#10003;&nbsp; {{ success }} <a href="/login">Sign in now &rarr;</a></div>
+    {% endif %}
+
+    <form method="POST" action="/register">
+      <div class="row">
+        <div class="field">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" name="firstName" placeholder="John" required/>
+        </div>
+        <div class="field">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" name="lastName" placeholder="Doe" required/>
+        </div>
+      </div>
+      <div class="field">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="john@example.com" required/>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Minimum 8 characters" required minlength="8"/>
+      </div>
+      <button type="submit" class="btn">Sign Up</button>
+    </form>
+
+    <p class="footer-link">Already have an account?&nbsp;<a href="/login">Sign in</a></p>
+  </div>
+</div>
+</body>
+</html>
