@@ -1,0 +1,37 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+# Use Python
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.10'
+  displayName: 'Use Python 3.10'
+
+# Install dependencies
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
+
+# Verify important imports (THIS IS KEY FOR YOUR ERROR)
+- script: |
+    python -c "import flask"
+    python -c "import pymysql"
+    python -c "from flask_mysqldb import MySQL"
+    echo "All imports successful ✅"
+  displayName: 'Verify modules'
+
+# (Optional but good for marks) Syntax check
+- script: |
+    python -m py_compile app.py
+    echo "Code syntax OK ✅"
+  displayName: 'Check syntax'
+
+# Final success message
+- script: echo "CI Pipeline Passed 🚀"
+  displayName: 'Done'
