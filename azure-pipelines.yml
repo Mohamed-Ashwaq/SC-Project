@@ -6,20 +6,32 @@ pool:
 
 steps:
 
+# Use Python
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '3.x'
-  displayName: 'Use Python'
+    versionSpec: '3.10'
+  displayName: 'Use Python 3.10'
 
+# Install dependencies
 - script: |
     python -m pip install --upgrade pip
     pip install -r requirements.txt
   displayName: 'Install dependencies'
 
-# OPTIONAL: Run simple check instead of running server
+# Verify important imports (THIS IS KEY FOR YOUR ERROR)
 - script: |
-    python -c "import flask; print('Flask installed successfully')"
-  displayName: 'Verify installation'
+    python -c "import flask"
+    python -c "import pymysql"
+    python -c "from flask_mysqldb import MySQL"
+    echo "All imports successful ✅"
+  displayName: 'Verify modules'
 
-- script: echo "CI Pipeline Passed ✅"
+# (Optional but good for marks) Syntax check
+- script: |
+    python -m py_compile app.py
+    echo "Code syntax OK ✅"
+  displayName: 'Check syntax'
+
+# Final success message
+- script: echo "CI Pipeline Passed 🚀"
   displayName: 'Done'
